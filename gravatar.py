@@ -1,4 +1,5 @@
 import hashlib
+from urllib import parse
 class Gravatar:
     __hash = ''
     __url = 'https://gravatar.com/avatar/'
@@ -10,4 +11,15 @@ class Gravatar:
         self.__params = kwargs
 
     def __str__(self) -> str:
-        return Gravatar.__url + self.__hash.hexdigest()
+        return Gravatar.__url + self.hash + self.query
+
+    @property
+    def hash(self) -> str:
+        return self.__hash.hexdigest()
+
+    @property
+    def query(self) -> str:
+        if (len(self.__params) > 0):
+            return '?' + parse.urlencode(self.__params)
+        else:
+            return ''
