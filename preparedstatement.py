@@ -36,7 +36,7 @@ class PreparedStatement:
         return self
 
     def execute(self, **kwargs):
-        return self._cursor.execute(self.__sql, {**self.__params, **kwargs})
+        return self.__cursor.execute(self.__sql, {**self.__params, **kwargs})
 
     def executemany(self, *args):
         result = [{**self.__params, **arg} for arg in args]
