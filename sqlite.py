@@ -16,7 +16,7 @@ class Sqlite(sqlite3.Connection):
             cols = ['*']
 
         if len(kwargs) > 0:
-            bindings = self.__format_bindings(kwargs.keys())
+            bindings = self.__format_bind_values(kwargs.keys())
             sql = 'SELECT {} FROM `{}` WHERE {};'.format(', '.join(cols), table, ' AND '.join(bindings))
         else:
             sql = 'SELECT {} FROM `{}`;'.format(', '.join(cols), table)
@@ -28,6 +28,9 @@ class Sqlite(sqlite3.Connection):
         bindings = self.__format_bindings(kwargs.keys())
         sql = 'INSERT INTO `{}` ({}) VALUES ({});'.format(table, ', '.join(cols), ', '.join(bindings))
         return self.execute(sql, kwargs)
+
+    def __format_bind_values(self, cols: tuple) -> list:
+        return ['`{}`=:{}'.format(key, key) for key in cols]
 
     def __format_cols(self, cols: tuple) -> list:
         return ['`{}`'.format(key) for key in cols]
